@@ -6,6 +6,8 @@ from collections import OrderedDict
 import requests
 import yaml
 
+pd.set_option('display.max_colwidth', None)
+
 url = "https://api0.prismacloud.io/search/config"
 token = os.getenv("prisma_token")
 headers = {
@@ -55,7 +57,7 @@ for k, accgr in enumerate(accgroups):
         for section in standards[std]:
             outdict[k]['output'].append(standards[std][section]['info'])
             outdict[k]['output'].append(result(accgr[0], **standards[std][section]))
-            outdict[k]['output'].append('-'*70)
+            outdict[k]['output'].append('-'*145)
      
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('report.j2')
