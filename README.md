@@ -1,4 +1,4 @@
-### Script to generate custom report for CIS Compliance Standards 
+### Script to generate custom report for CIS Compliance Standards CIS v1.3.0 Azure/AWS
 
 1. The list of compliance standards is set in `templates/stds.yaml`
 
