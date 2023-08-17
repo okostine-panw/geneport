@@ -37,19 +37,18 @@ def result(accgr, **params):
     return f"{txt1}\n{txt2}\n{txt3}\n{assetspass}\n{assetsfail}\n"
 
   if not df1.empty and not df2.empty:
-    #result = df1.merge(df2,left_on=params['left_on'], right_on=params['right_on'])
-    passed = df2.compare(df1)
+    total = df2[params['display_on']]
+    failed = df1[params['display_on']]
+    passed = pd.concat([total,failed]).drop_duplicates(keep=False)
     txt2 = f"Pass: {len(passed)}"
-    txt3 = f"Fail: {len(df1)}"
-    assetspass = f"\nPassed assets:\n{passed[params['display_on']].to_string(header=False, index=False)}"
-    assetsfail = f"\nFailed assets:\n{df1[params['display_on']].to_string(header=False, index=False)}"
+    txt3 = f"Fail: {len(failed)}"
+    assetspass = f"\nPassed assets:\n{passed.to_string(header=False, index=False)}"
+    assetsfail = f"\nFailed assets:\n{failed.to_string(header=False, index=False)}"
     return f"{txt1}\n{txt2}\n{txt3}\n{assetspass}\n{assetsfail}\n"
   
   if df1.empty and df2.empty:
     return f"{txt1}\n"
 
-#with open('accgroups.csv') as f:
-#    accgroups = list(csv.reader(f, delimiter=';'))
 with open('accgroups.txt') as f:
     accgroups = f.readlines()
 
