@@ -30,34 +30,39 @@ def result(accgr, **params):
   txt1 = f"Total number of assets: {len(df2)}"
 
   if df1.empty and not df2.empty:
-    txt2 = f"Pass: {len(df2) - len(df1)}"
+    txt2 = f"Pass: {len(df2)}"
     txt3 = f"Fail: {len(df1)}"
-    return f"{txt1}\n{txt2}\n{txt3}\n"
+    assetspass = f"\nPassed assets:\n{df2[params['display_on']].to_string(header=False, index=False)}"
+    assetsfail = f"\nFailed assets: None\n"
+    return f"{txt1}\n{txt2}\n{txt3}\n{assetspass}\n{assetsfail}\n"
 
   if not df1.empty and not df2.empty:
-    result = df1.merge(df2,left_on=params['left_on'], right_on=params['right_on'])
-    txt2 = f"Pass: {len(df2) - len(result)}"
-    txt3 = f"Fail: {len(result)}"
-    assetsfail = f"\nFailed assets:\n{result[params['left_on']].to_string(header=False, index=False)}"
-    return f"{txt1}\n{txt2}\n{txt3}\n{assetsfail}\n"
+    total = df2[params['display_on']]
+    failed = df1[params['display_on']]
+    passed = pd.concat([total,failed]).drop_duplicates(keep=False)
+    txt2 = f"Pass: {len(passed)}"
+    txt3 = f"Fail: {len(failed)}"
+    assetspass = f"\nPassed assets:\n{passed.to_string(header=False, index=False)}"
+    assetsfail = f"\nFailed assets:\n{failed.to_string(header=False, index=False)}"
+    return f"{txt1}\n{txt2}\n{txt3}\n{assetspass}\n{assetsfail}\n"
   
   if df1.empty and df2.empty:
     return f"{txt1}\n"
 
-with open('accgroups.csv') as f:
-    accgroups = list(csv.reader(f, delimiter=';'))
+with open('accgroups.txt') as f:
+    accgroups = f.readlines()
 
 outdict = OrderedDict()
 
 standards = yaml.load(open('./templates/stds.yaml'), Loader=yaml.FullLoader)
 
 for k, accgr in enumerate(accgroups):
-    outdict.update({k:{ 'name': accgr[0], 'output':[] }})
+    outdict.update({k:{ 'name': accgr.strip(), 'output':[] }})
     for std in standards:
         for section in standards[std]:
             outdict[k]['output'].append(standards[std][section]['info'])
-            outdict[k]['output'].append(result(accgr[0], **standards[std][section]))
-            outdict[k]['output'].append('-'*145)
+            outdict[k]['output'].append(result(accgr.strip(), **standards[std][section]))
+            outdict[k]['output'].append('-'*145) # line of 145 *, cosmetic
      
 env = Environment(loader=FileSystemLoader('templates'))
 template = env.get_template('report.j2')
