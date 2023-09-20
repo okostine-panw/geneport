@@ -1,17 +1,20 @@
-# Import necessary libraries
 import os
-import csv
-from jinja2 import Environment, FileSystemLoader
-import pandas as pd
-from collections import OrderedDict
 import requests
+import pandas as pd
+from jinja2 import Environment, FileSystemLoader
 import yaml
 
 # Configure Pandas to display entire text columns
 pd.set_option('display.max_colwidth', None)
 
+# Constants
+PRISMA_API_URL = "https://api2.prismacloud.io/search/config"  # Updated URL
+ACC_GROUPS_FILE = 'accgroups.txt'
+STANDARDS_FILE = './templates/stds.yaml'
+TEMPLATE_FILE = 'report.j2'
+
 # Define the URL for the Prisma Cloud API and retrieve the authentication token from environment variables
-url = "https://api0.prismacloud.io/search/config"
+url = PRISMA_API_URL
 token = os.getenv("prisma_token")
 
 # Define headers for HTTP requests to the Prisma Cloud API
@@ -57,27 +60,34 @@ def result(accgr, **params):
         return f"{txt1}\n"
 
 # Read a list of account groups from a file named 'accgroups.txt'
-with open('accgroups.txt') as f:
+with open(ACC_GROUPS_FILE) as f:
     accgroups = f.readlines()
 
 # Create an ordered dictionary to store the results
 outdict = OrderedDict()
 
 # Load standards from a YAML file named 'stds.yaml' using PyYAML
-standards = yaml.load(open('./templates/stds.yaml'), Loader=yaml.FullLoader)
+standards = yaml.load(open(STANDARDS_FILE), Loader=yaml.FullLoader)
 
 # Iterate through each account group and run compliance checks
 for k, accgr in enumerate(accgroups):
     outdict.update({k: {'name': accgr.strip(), 'output': []}})
     for std in standards:
         for section in standards[std]:
-            outdict[k]['output'].append(standards[std][section]['info'])
+            section_info = standards[std][section]['info']
+            cloud_type = standards[std][section].get('CloudType', {}).get('info', '')
+            api_info = standards[std][section].get('API', {}).get('info', '')
+            mandatory_info = standards[std][section].get('Mandatory', {}).get('info', '')
+            
+            section_message = f"{section_info}\n{cloud_type}\n{api_info}\n{mandatory_info}"
+            
+            outdict[k]['output'].append(section_message)
             outdict[k]['output'].append(result(accgr.strip(), **standards[std][section]))
             outdict[k]['output'].append('-' * 145)  # Line of 145 '*', cosmetic
 
 # Set up Jinja2 templating engine
 env = Environment(loader=FileSystemLoader('templates'))
-template = env.get_template('report.j2')
+template = env.get_template(TEMPLATE_FILE)
 
 # Generate reports for each account group and write them to files
 for k in outdict:
