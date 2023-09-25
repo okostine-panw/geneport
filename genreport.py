@@ -52,7 +52,7 @@ def result(accgr, **params):
     df1 = response(rql1)
     df2 = response(rql2)
 
-    txt1 = f"Total number of assets: {len(df2)} - {len(df1)}"
+    txt1 = f"Total number of assets: {len(df2)}"
 
     if df1.empty and not df2.empty:
         txt2 = f"Pass: {len(df2)}"
