@@ -1,6 +1,17 @@
-CIS v1.3.0 (AWS):
+MTSBv2 (AWS):
   3.3:
-    info: "AWS,Native,Yes\nCompliance standard: CIS v1.3.0 (AWS)\nSection: 3.3\nEnsure the S3 bucket used to store CloudTrail logs is not publicly accessible\n"
+    CloudType: "AWS"
+    info: "\nCompliance standard: CIS v1.3.0 (AWS)\nSection: 3.3\nEnsure the S3 bucket used to store CloudTrail logs is not publicly accessible\n"
     rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = ((((acl.grants[?(@.grantee=='AllUsers')] size > 0) or policyStatus.isPublic is true) and publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((acl.grants[?(@.grantee=='AllUsers')] size > 0) and ((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false))) or (policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))))\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' as X; config from cloud.resource where api.name = 'aws-cloudtrail-describe-trails' as Y; filter'$.X.bucketName equals $.Y.s3BucketName'; show X;\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
-    display_on: "bucketName accountId"
+    display_on: "accountId"
+    API: "Native"
+    Mandatory: "Yes"
+  1.04:
+    CloudType: "AWS"
+    info: "\nEnsure no root user account access key exists\n"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql2: ""
+    display_on: "arn"
+    API: "Native"
+    Mandatory: "Yes"
