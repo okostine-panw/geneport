@@ -101,9 +101,11 @@ def response(payload):
 
 def result(accgr, **params):
     rql1 = params['rql1'] % accgr
-    #rql2 = params.get('rql2', None)  # Use get to handle the case where rql2 is not present
+    rql2 = params.get('rql2', None)  # Use get to handle the case where rql2 is not present
+    #rql2 = params['rql2'] % accgr
+    # Use get to handle the case where rql2 is not present
 
-    rql2 = params.get('rql2', '')  # Check if 'rql2' is present, use an empty string if not
+    #rql2 = params.get('rql2', '')  # Check if 'rql2' is present, use an empty string if not
 
     df1 = response(rql1)
     df2 = response(rql2)
@@ -140,6 +142,18 @@ def result(accgr, **params):
         return f"{txt1}\n{txt2}\n{txt3}\n{assetspass}\n{assetsfail}\n"
     if df1.empty and df2.empty:
         return f"{txt1}\n"
+def response(payload):
+    try:
+        response = requests.request("POST", url, headers=headers, data=payload).json()
+        data_items = response.get('data', {}).get('items', [])
+        if not data_items:
+            print("No 'data' or 'items' found in the API response:")
+            print(response)
+            return pd.DataFrame()
+        return pd.json_normalize([item.get('data', {}) for item in data_items])
+    except Exception as e:
+        print(f"An error occurred while making the API request: {str(e)}")
+        return pd.DataFrame()
 
 
 with open('accgroups.txt') as f:
