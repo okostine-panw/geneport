@@ -11,7 +11,7 @@ MTSBv2 (AWS):
   1.04:
     CloudType: "AWS"
     info: "\nEnsure no root user account access key exists\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -19,7 +19,7 @@ MTSBv2 (AWS):
   1.08:
     CloudType: "AWS"
     info: "\nEnsure IAM password policy requires minimum length of 14 or greater \n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or minimumPasswordLength < 14 or minimumPasswordLength does not exist'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or minimumPasswordLength < 14 or minimumPasswordLength does not exist'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -27,7 +27,7 @@ MTSBv2 (AWS):
   1.09:
     CloudType: "AWS"
     info: "\nEnsure IAM password policy prevents password reuse\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or passwordReusePrevention equals null or passwordReusePrevention !isType Integer or passwordReusePrevention < 1'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or passwordReusePrevention equals null or passwordReusePrevention !isType Integer or passwordReusePrevention < 1'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -35,7 +35,7 @@ MTSBv2 (AWS):
   1.10:
     CloudType: "AWS"
     info: "\nEnsure multi-factor authentication (MFA) is enabled for all IAM users that have a console password\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-credential-report' AND json.rule='password_enabled equals \"true\" and mfa_active is false'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-credential-report' AND json.rule='password_enabled equals \"true\" and mfa_active is false'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Custom"
@@ -83,7 +83,7 @@ MTSBv2 (AWS):
   1.20:
     CloudType: "AWS"
     info: "\nEnsure that S3 Buckets are configured with 'Block public access (bucket settings)'\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-s3api-get-bucket-acl' AND json.rule = '(publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.ignorePublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicPolicy is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicPolicy is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.restrictPublicBuckets is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = '(publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.ignorePublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicPolicy is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicPolicy is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.restrictPublicBuckets is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "bucketName"
     API: "Native"
@@ -115,7 +115,7 @@ MTSBv2 (AWS):
   3.3:
     CloudType: "AWS"
     info: "\nEnsure the S3 bucket used to store CloudTrail logs is not publicly accessible\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-s3api-get-bucket-acl' AND json.rule = '((((acl.grants[?(@.grantee=='AllUsers')] size > 0) or policyStatus.isPublic is true) and publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((acl.grants[?(@.grantee=='AllUsers')] size > 0) and ((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false))) or (policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false)))) as X; config from cloud.resource where api.name = 'aws-cloudtrail-describe-trails' as Y; filter'$.X.bucketName equals $.Y.s3BucketName'; show X;	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = '((((acl.grants[?(@.grantee=='AllUsers')] size > 0) or policyStatus.isPublic is true) and publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((acl.grants[?(@.grantee=='AllUsers')] size > 0) and ((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false))) or (policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false)))) as X; config from cloud.resource where api.name = 'aws-cloudtrail-describe-trails' as Y; filter'$.X.bucketName equals $.Y.s3BucketName'; show X;	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Custom"
@@ -133,7 +133,7 @@ MTSBv2 (Azure):
   1.04:
     CloudType: "AWS"
     info: "\nEnsure no root user account access key exists\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -141,7 +141,7 @@ MTSBv2 (Azure):
   1.08:
     CloudType: "AWS"
     info: "\nEnsure IAM password policy requires minimum length of 14 or greater \n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or minimumPasswordLength < 14 or minimumPasswordLength does not exist'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or minimumPasswordLength < 14 or minimumPasswordLength does not exist'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -149,7 +149,7 @@ MTSBv2 (Azure):
   1.09:
     CloudType: "AWS"
     info: "\nEnsure IAM password policy prevents password reuse\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or passwordReusePrevention equals null or passwordReusePrevention !isType Integer or passwordReusePrevention < 1'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or passwordReusePrevention equals null or passwordReusePrevention !isType Integer or passwordReusePrevention < 1'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
@@ -157,7 +157,7 @@ MTSBv2 (Azure):
   1.10:
     CloudType: "AWS"
     info: "\nEnsure multi-factor authentication (MFA) is enabled for all IAM users that have a console password\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-credential-report' AND json.rule='password_enabled equals \"true\" and mfa_active is false'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name = 'aws-iam-get-credential-report' AND json.rule='password_enabled equals \"true\" and mfa_active is false'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Custom"
@@ -205,7 +205,7 @@ MTSBv2 (Azure):
   1.20:
     CloudType: "AWS"
     info: "\nEnsure that S3 Buckets are configured with 'Block public access (bucket settings)'\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-s3api-get-bucket-acl' AND json.rule = '(publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.ignorePublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicPolicy is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicPolicy is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.restrictPublicBuckets is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = '(publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.ignorePublicAcls is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.blockPublicPolicy is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.blockPublicPolicy is false)) or ((publicAccessBlockConfiguration does not exist or publicAccessBlockConfiguration.restrictPublicBuckets is false) and (accountLevelPublicAccessBlockConfiguration does not exist or accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "bucketName"
     API: "Native"
@@ -237,7 +237,7 @@ MTSBv2 (Azure):
   3.3:
     CloudType: "AWS"
     info: "\nEnsure the S3 bucket used to store CloudTrail logs is not publicly accessible\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name='aws-s3api-get-bucket-acl' AND json.rule = '((((acl.grants[?(@.grantee=='AllUsers')] size > 0) or policyStatus.isPublic is true) and publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((acl.grants[?(@.grantee=='AllUsers')] size > 0) and ((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false))) or (policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false)))) as X; config from cloud.resource where api.name = 'aws-cloudtrail-describe-trails' as Y; filter'$.X.bucketName equals $.Y.s3BucketName'; show X;	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = '((((acl.grants[?(@.grantee=='AllUsers')] size > 0) or policyStatus.isPublic is true) and publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration does not exist) or ((acl.grants[?(@.grantee=='AllUsers')] size > 0) and ((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false))) or (policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false)))) as X; config from cloud.resource where api.name = 'aws-cloudtrail-describe-trails' as Y; filter'$.X.bucketName equals $.Y.s3BucketName'; show X;	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "bucketName"
     API: "Custom"

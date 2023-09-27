@@ -7,11 +7,11 @@ MTSBv2 (AWS):
     display_on: "accountId"
     API: "Native"
     Mandatory: "Yes"
-  1.04:
+  1.08:
     CloudType: "AWS"
-    info: "\nEnsure no root user account access key exists\n"
-    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' and api.name='aws-iam-get-account-summary' AND json.rule='not AccountAccessKeysPresent equals 0'	\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
+    info: "\nEnsure IAM password policy requires minimum length of 14 or greater \n"
+    rql1: "{\r\n  \"query\":\"config from cloud.resource where cloud.accountgroup = '%s' AND cloud.type = 'aws' AND api.name = 'aws-iam-get-account-password-policy' AND json.rule='isDefaultPolicy is true or minimumPasswordLength < 14 or minimumPasswordLength does not exist'\",\r\n  \"timeRange\":{\"type\":\"to_now\",\"value\":\"epoch\"},\r\n    \"heuristicSearch\":true\r\n}"
     rql2: ""
     display_on: "arn"
     API: "Native"
-    Mandatory: "Yes"
+    Mandatory: "No"
